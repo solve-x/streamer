@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  nginx-rtmp-srv:
+    build: .
+    image: solve-x/nginx-rtmp-srv
+    ports:
+      - "1936:1935"
+      - "12345:12345"
+    volumes:
+      - ./streamer:/usr/local/nginx/public
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+
+  database:
+    image: mysql:5.7
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_DATABASE=streamer"
+      - "MYSQL_USER=root"
+      - "MYSQL_PASSWORD=admin"
+      - "MYSQL_ROOT_PASSWORD=admin"
+
+volumes:
+  dbdata:

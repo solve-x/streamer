@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Doctrine\DBAL\Types\Type;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Register custom enum types.
+
+        // Use Carbon instead of PHP's date in Doctrine entities.
+        Type::overrideType('datetime', DoctrineCarbonType::class);
+
     }
 
     /**

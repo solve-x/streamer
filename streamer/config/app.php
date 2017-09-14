@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => env('DEFAULT_LOCALE', 'en'),
 
     /*
     |--------------------------------------------------------------------------
@@ -167,7 +167,8 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-
+        LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
         /*
          * Application Service Providers...
          */

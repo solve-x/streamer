@@ -40,14 +40,14 @@ class Stream
     /**
      * @ORM\ManyToOne(targetEntity="StreamType", inversedBy="streams")
      * @see StreamType
-     * @var integer
+     * @var integer|StreamType
      */
     protected $type;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="streams")
      * @see User
-     * @var integer
+     * @var integer|User
      */
     protected $createdBy;
 
@@ -62,4 +62,25 @@ class Stream
      * @var ArrayCollection|UserStreamRole[]
      */
     protected $userStreamRoles;
+
+    /**
+     * Stream constructor.
+     * @param int $id
+     * @param string $name
+     * @param string $streamKey
+     * @param int|StreamType $type
+     * @param int|User $createdBy
+     * @param Carbon $created
+     * @param UserStreamRole[]|ArrayCollection $userStreamRoles
+     */
+    public function __construct($id, $name, $streamKey, $type, $createdBy, Carbon $created, $userStreamRoles)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->streamKey = $streamKey;
+        $this->type = $type;
+        $this->createdBy = $createdBy;
+        $this->created = $created;
+        $this->userStreamRoles = $userStreamRoles;
+    }
 }

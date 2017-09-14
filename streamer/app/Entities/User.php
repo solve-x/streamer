@@ -7,17 +7,26 @@ use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repositories\UsersRepository")
  * @ORM\Table(name="users", uniqueConstraints={@UniqueConstraint(
  *     name="idx_unique_email",
  *     columns={"email"}
  *     )})
  */
-class User implements \Illuminate\Contracts\Auth\Authenticatable
+class User implements
+    Authenticatable,
+    AuthorizableContract,
+    CanResetPasswordContract
 {
     use \LaravelDoctrine\ORM\Auth\Authenticatable;
+    use Authorizable, CanResetPassword;
 
     /**
      * @ORM\Id
@@ -89,6 +98,14 @@ class User implements \Illuminate\Contracts\Auth\Authenticatable
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Stream[]|ArrayCollection
+     */
+    public function getStreams()
+    {
+        return $this->streams;
     }
 
 }

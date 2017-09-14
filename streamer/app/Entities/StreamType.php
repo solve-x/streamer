@@ -42,4 +42,19 @@ class StreamType
      * @var ArrayCollection|Stream[]
      */
     protected $streams;
+
+    /**
+     * StreamType constructor.
+     * @param int $id
+     * @param string $name
+     * @param string $label
+     * @param Stream[]|ArrayCollection $streams
+     */
+    public function __construct($id, $name, $label, $streams)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->label = $label;
+        $this->streams = $streams;
+    }
 }

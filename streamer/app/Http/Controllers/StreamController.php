@@ -2,24 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\StreamService;
+use Illuminate\Http\Request;
+
 class StreamController extends Controller
 {
-    public function __construct()
+    /**
+     * @var StreamService
+     */
+    private $streamService = null;
+
+    public function __construct(StreamService $streamService)
     {
         $this->middleware('auth');
+        $this->streamService = $streamService;
     }
-
-
 
     /**
      * Return a HLS stream fragment.
      *
+     * @param Request $request
      * @param string $streamPart
      * @return \Illuminate\Http\Response
      */
-    public function live($streamPart)
+    public function live(Request $request, string $streamPart)
     {
-        $fragmentsDirectory = env('HLS_DIR');
+        /*$this->streamService->getHLSFragmentPath(
+            $streamPart,
+            $request->user()
+        );*/
+
+        $s = $request->user()->getStreams();
+        var_dump($s[0]);
+
+        /*$fragmentsDirectory = env('HLS_DIR');
 
         $fragmentPath = "$fragmentsDirectory/$streamPart";
 
@@ -27,6 +43,6 @@ class StreamController extends Controller
             return response("Not found.", 404);
         }
 
-        return response()->file($fragmentPath);
+        return response()->file($fragmentPath);*/
     }
 }

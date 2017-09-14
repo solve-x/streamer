@@ -10,7 +10,7 @@ class StreamTypesRepository extends BaseRepository
 
     /**
      * @param $id
-     * @return null|StreamType
+     * @return null|object|StreamType
      */
     public function find($id)
     {

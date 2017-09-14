@@ -15,15 +15,15 @@ class StreamService extends BaseService
     /**
      * @var UnitOfWorkInterface
      */
-    private $database = null;
+    private $entityManager = null;
 
     /**
      * StreamService constructor.
-     * @param UnitOfWorkInterface $database
+     * @param UnitOfWorkInterface $entityManager
      */
-    public function __construct(UnitOfWorkInterface $database)
+    public function __construct(UnitOfWorkInterface $entityManager)
     {
-        $this->database = $database;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -35,10 +35,10 @@ class StreamService extends BaseService
         string $fragmentName,
         User $user): string
     {
-        $this->database->transactional(function () use ($user) {
+        $this->entityManager->transactional(function () use ($user) {
 
             $type = $this
-                ->database
+                ->entityManager
                 ->getStreamTypesRepository()
                 ->find(1);
 
@@ -52,10 +52,10 @@ class StreamService extends BaseService
                 null
             );
 
-            $this->database->persist($stream);
+            $this->entityManager->persist($stream);
             $user->getStreams()->add($stream);
 
-            $this->database->flush();
+            $this->entityManager->flush();
         });
 
         return "";

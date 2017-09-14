@@ -6,6 +6,7 @@ namespace App\Repositories;
 use App\Entities\StreamType;
 use App\Entities\User;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 class DoctrineUnitOfWork implements UnitOfWorkInterface
 {
@@ -44,7 +45,7 @@ class DoctrineUnitOfWork implements UnitOfWorkInterface
     }
 
     /**
-     * @return UsersRepository
+     * @return UsersRepository|EntityRepository
      */
     public function getUsersRepository()
     {
@@ -52,7 +53,7 @@ class DoctrineUnitOfWork implements UnitOfWorkInterface
     }
 
     /**
-     * @return StreamTypesRepository
+     * @return StreamTypesRepository|EntityRepository
      */
     public function getStreamTypesRepository()
     {

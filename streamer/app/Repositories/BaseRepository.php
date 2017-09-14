@@ -54,8 +54,13 @@ class BaseRepository
     /**
      * @inheritdoc
      */
-    protected function find($id)
+    public function find($id)
     {
         return $this->entityRepository->find($id);
+    }
+
+    public function findOneBy(array $criteria)
+    {
+        return $this->entityRepository->findOneBy($criteria);
     }
 }

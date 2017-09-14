@@ -33,7 +33,7 @@ class StreamController extends Controller
         );*/
 
         $s = $request->user()->getStreams();
-        var_dump($s[0]);
+        var_dump($request->user());
 
         /*$fragmentsDirectory = env('HLS_DIR');
 

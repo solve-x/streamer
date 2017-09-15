@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet">
     <link href="http://vjs.zencdn.net/6.2.7/video-js.css" rel="stylesheet">
 </head>
 <body>
@@ -37,7 +37,10 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        @if (Auth::user() && Auth::user()->isSuperAdmin())
+                            <li><a href="{{ route('streams') }}">Streams</a></li>
+                            <li><a href="{{ route('users') }}">Users</a></li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -79,6 +82,10 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="http://vjs.zencdn.net/6.2.7/video.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.10.1/videojs-contrib-hls.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
     @yield('scripts')
 </body>
 </html>

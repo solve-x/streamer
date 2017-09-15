@@ -2,20 +2,17 @@
 
 namespace App\Services;
 
-
 use App\Entities\Stream;
-use App\Entities\StreamType;
 use App\Entities\User;
 use App\Repositories\UnitOfWorkInterface;
 use Carbon\Carbon;
-use Doctrine\ORM\EntityManager;
 
 class StreamService extends BaseService
 {
     /**
      * @var UnitOfWorkInterface
      */
-    private $entityManager = null;
+    private $entityManager;
 
     /**
      * StreamService constructor.
@@ -28,36 +25,81 @@ class StreamService extends BaseService
 
     /**
      * @param string $fragmentName
-     * @param User $user
-     * @return string
+     * @return string|null
      */
-    public function getHLSFragmentPath(
-        string $fragmentName,
-        User $user): string
+    public function getHLSFragmentPath(string $fragmentName)
     {
-        $this->entityManager->transactional(function () use ($user) {
+        $fragmentsDirectory = env('HLS_DIR');
 
-            $type = $this
-                ->entityManager
-                ->getStreamTypesRepository()
-                ->find(1);
+        $fragmentPath = "$fragmentsDirectory/$fragmentName";
 
-            $stream = new Stream(
-                null,
-                'test',
-                'asd',
-                $type,
-                $user,
-                Carbon::now(),
-                null
-            );
+        if (!file_exists($fragmentPath)) {
+            return null;
+        }
+
+        return $fragmentPath;
+    }
+
+    public function getAllStreams()
+    {
+        return $this->entityManager->getStreamsRepository()->findAll();
+    }
+
+    public function getAllStreamTypes()
+    {
+        return $this->entityManager->getStreamTypesRepository()->findAll();
+    }
+
+    public function createNewStream(
+        string $name,
+        string $streamKey,
+        int $typeId,
+        int $createdById
+    ): int
+    {
+        $selectedType = $this
+            ->entityManager
+            ->getStreamTypesRepository()
+            ->find($typeId);
+
+        $user = $this
+            ->entityManager
+            ->getUsersRepository()
+            ->find($createdById);
+
+        $stream = new Stream(
+            null,
+            $name,
+            $streamKey,
+            $selectedType,
+            $user,
+            Carbon::now(),
+            null
+        );
+
+        $this->entityManager->transactional(function () use ($stream) {
 
             $this->entityManager->persist($stream);
-            $user->getStreams()->add($stream);
 
             $this->entityManager->flush();
         });
 
-        return "";
+        return $stream->getId();
+    }
+
+    public function existsByFragmentName(string $fragmentName): bool
+    {
+        $fragmentName = pathinfo($fragmentName)['filename'];
+
+        $stream = $this->entityManager->getStreamsRepository()->findOneBy([
+            'streamKey' => $fragmentName
+        ]);
+
+        return null !== $stream;
+    }
+
+    public function userHasAccess(User $user): bool
+    {
+        return $user !== null;
     }
 }

@@ -3,6 +3,7 @@
 
 namespace App\Repositories;
 
+use App\Entities\Stream;
 use App\Entities\StreamType;
 use App\Entities\User;
 use Doctrine\ORM\EntityManager;
@@ -24,12 +25,12 @@ class DoctrineUnitOfWork implements UnitOfWorkInterface
         $this->entityManager = $entityManager;
     }
 
-    public function persist(object $entity)
+    public function persist($entity)
     {
         $this->entityManager->persist($entity);
     }
 
-    public function remove(object $entity)
+    public function remove($entity)
     {
         $this->entityManager->remove($entity);
     }
@@ -58,5 +59,13 @@ class DoctrineUnitOfWork implements UnitOfWorkInterface
     public function getStreamTypesRepository()
     {
         return $this->entityManager->getRepository(StreamType::class);
+    }
+
+    /**
+     * @return StreamsRepository|StreamsRepository
+     */
+    public function getStreamsRepository()
+    {
+        return $this->entityManager->getRepository(Stream::class);
     }
 }

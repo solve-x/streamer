@@ -63,4 +63,9 @@ class BaseRepository
     {
         return $this->entityRepository->findOneBy($criteria);
     }
+
+    public function findAll()
+    {
+        return $this->entityRepository->findAll();
+    }
 }

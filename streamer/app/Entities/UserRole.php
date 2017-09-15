@@ -18,6 +18,8 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  */
 class UserRole
 {
+    const SuperAdmin = 1;
+
     /**
      * @ORM\Id()
      * @ORM\Column(type="integer")
@@ -43,4 +45,13 @@ class UserRole
      * @var ArrayCollection|User[]
      */
     protected $users;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
 }

@@ -108,4 +108,35 @@ class User implements
         return $this->streams;
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->isInRole(UserRole::SuperAdmin);
+    }
+
+    public function isInRole(int $roleId): bool
+    {
+        foreach ($this->userRoles as $storedRole) {
+            if ($storedRole->getId() === $roleId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }

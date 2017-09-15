@@ -83,4 +83,61 @@ class Stream
         $this->created = $created;
         $this->userStreamRoles = $userStreamRoles;
     }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreamKey(): string
+    {
+        return $this->streamKey;
+    }
+
+    /**
+     * @return StreamType|int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return User|int
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getCreated(): Carbon
+    {
+        return $this->created;
+    }
+
+    /**
+     * @return UserStreamRole[]|ArrayCollection
+     */
+    public function getUserStreamRoles()
+    {
+        return $this->userStreamRoles;
+    }
+
 }

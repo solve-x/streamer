@@ -19,6 +19,37 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 class StreamType
 {
     /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @return Stream[]|ArrayCollection
+     */
+    public function getStreams()
+    {
+        return $this->streams;
+    }
+    /**
      * @ORM\Id()
      * @ORM\Column(type="integer")
      * @var integer

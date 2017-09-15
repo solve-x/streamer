@@ -6,9 +6,9 @@ namespace App\Repositories;
 
 interface UnitOfWorkInterface
 {
-    public function persist(object $entity);
+    public function persist($entity);
 
-    public function remove(object $entity);
+    public function remove($entity);
 
     public function flush();
 
@@ -23,4 +23,9 @@ interface UnitOfWorkInterface
      * @return StreamTypesRepository
      */
     public function getStreamTypesRepository();
+
+    /**
+     * @return StreamsRepository
+     */
+    public function getStreamsRepository();
 }

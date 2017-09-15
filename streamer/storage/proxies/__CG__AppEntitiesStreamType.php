@@ -173,4 +173,52 @@ class StreamType extends \App\Entities\StreamType implements \Doctrine\ORM\Proxy
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getId(): int
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int)  parent::getId();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
+
+        return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getName', []);
+
+        return parent::getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLabel(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLabel', []);
+
+        return parent::getLabel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStreams()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStreams', []);
+
+        return parent::getStreams();
+    }
+
 }

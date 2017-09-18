@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-    @include('dialogs.addEditStream')
     <div class="row">
         <table class="table table-condensed table-responsive table-striped">
             <thead>
@@ -10,9 +9,9 @@
                     <th>Name</th>
                     <th>Key</th>
                     <th>
-                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#addEditStream">
+                        <a href="{{ route('createEditStream') }}" class="btn btn-success btn-xs">
                             <span class="glyphicon glyphicon-plus"></span>
-                        </button>
+                        </a>
                     </th>
                 </tr>
             </thead>
@@ -22,9 +21,9 @@
                         <td>{{ $stream->getName() }}</td>
                         <td>{{ $stream->getStreamKey() }}</td>
                         <td>
-                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#addEditStream">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
+                            <a href="{{ route('createEditStream', ['id' => $stream->getId()]) }}" class="btn btn-default btn-xs">
+                                <span title="Edit" class="glyphicon glyphicon-cog"></span>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

@@ -18,4 +18,13 @@ class StreamsRepository extends BaseRepository
     {
         return parent::find($id);
     }
+
+    /**
+     * @param array $criteria
+     * @return null|object|Stream
+     */
+    public function findOneBy(array $criteria)
+    {
+        return parent::findOneBy($criteria);
+    }
 }

@@ -64,6 +64,12 @@ class Stream
     protected $userStreamRoles;
 
     /**
+     * @ORM\Column(type="boolean")
+     * @var boolean
+     */
+    protected $isLive;
+
+    /**
      * Stream constructor.
      * @param int $id
      * @param string $name
@@ -71,9 +77,18 @@ class Stream
      * @param int|StreamType $type
      * @param int|User $createdBy
      * @param Carbon $created
+     * @param $isLive
      * @param UserStreamRole[]|ArrayCollection $userStreamRoles
      */
-    public function __construct($id, $name, $streamKey, $type, $createdBy, Carbon $created, $userStreamRoles)
+    public function __construct(
+        $id,
+        $name,
+        $streamKey,
+        $type,
+        $createdBy,
+        Carbon $created,
+        $isLive = false,
+        $userStreamRoles = null)
     {
         $this->id = $id;
         $this->name = $name;
@@ -82,12 +97,89 @@ class Stream
         $this->createdBy = $createdBy;
         $this->created = $created;
         $this->userStreamRoles = $userStreamRoles;
+        $this->isLive = $isLive;
+    }
+
+    public static function empty()
+    {
+        return new Stream(
+            null,
+            '',
+            '',
+            null,
+            null,
+            Carbon::now()
+        );
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param string $streamKey
+     */
+    public function setStreamKey(string $streamKey)
+    {
+        $this->streamKey = $streamKey;
+    }
+
+    /**
+     * @param StreamType|int $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param User|int $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @param Carbon $created
+     */
+    public function setCreated(Carbon $created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @param UserStreamRole[]|ArrayCollection $userStreamRoles
+     */
+    public function setUserStreamRoles($userStreamRoles)
+    {
+        $this->userStreamRoles = $userStreamRoles;
+    }
+
+    /**
+     * @param bool $isLive
+     */
+    public function setIsLive(bool $isLive)
+    {
+        $this->isLive = $isLive;
     }
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -140,4 +232,11 @@ class Stream
         return $this->userStreamRoles;
     }
 
+    /**
+     * @return bool
+     */
+    public function isLive(): bool
+    {
+        return $this->isLive;
+    }
 }

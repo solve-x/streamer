@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entities\Stream;
+use App\Entities\StreamType;
 use App\Entities\User;
 use App\Repositories\UnitOfWorkInterface;
 use Carbon\Carbon;
@@ -50,11 +51,13 @@ class StreamService extends BaseService
         return $this->entityManager->getStreamTypesRepository()->findAll();
     }
 
-    public function createNewStream(
+    public function createUpdateStream(
+        $streamId,
         string $name,
         string $streamKey,
         int $typeId,
-        int $createdById
+        int $createdById,
+        bool $isLive
     ): int
     {
         $selectedType = $this
@@ -62,19 +65,47 @@ class StreamService extends BaseService
             ->getStreamTypesRepository()
             ->find($typeId);
 
-        $user = $this
-            ->entityManager
-            ->getUsersRepository()
-            ->find($createdById);
+        if (null === $streamId) {
 
+            $user = $this
+                ->entityManager
+                ->getUsersRepository()
+                ->find($createdById);
+
+            return $this->createNewStream(
+                $name,
+                $streamKey,
+                $selectedType,
+                $user,
+                $isLive
+            );
+        }
+
+        return $this->updateStream(
+            $streamId,
+            $name,
+            $streamKey,
+            $selectedType,
+            $isLive
+        );
+    }
+
+    private function createNewStream(
+        string $name,
+        string $streamKey,
+        StreamType $type,
+        User $createdBy,
+        bool $isLive
+    ): int
+    {
         $stream = new Stream(
             null,
             $name,
             $streamKey,
-            $selectedType,
-            $user,
+            $type,
+            $createdBy,
             Carbon::now(),
-            null
+            $isLive
         );
 
         $this->entityManager->transactional(function () use ($stream) {
@@ -87,19 +118,71 @@ class StreamService extends BaseService
         return $stream->getId();
     }
 
+    private function updateStream(
+        int $id,
+        string $name,
+        string $streamKey,
+        StreamType $type,
+        bool $isLive
+    ): int
+    {
+        $entity = $this->getStreamById($id);
+
+        $entity->setName($name);
+        $entity->setStreamKey($streamKey);
+        $entity->setType($type);
+        $entity->setIsLive($isLive);
+
+        $this->entityManager->transactional(function () use ($entity) {
+
+            $this->entityManager->persist($entity);
+
+            $this->entityManager->flush();
+        });
+
+        return $entity->getId();
+    }
+
+    public function deleteStream(int $id): bool
+    {
+        $entity = $this->getStreamById($id);
+
+        $this->entityManager->transactional(function () use ($entity) {
+
+            $this->entityManager->remove($entity);
+
+            $this->entityManager->flush();
+        });
+
+        return true;
+    }
+
     public function existsByFragmentName(string $fragmentName): bool
     {
-        $fragmentName = pathinfo($fragmentName)['filename'];
-
-        $stream = $this->entityManager->getStreamsRepository()->findOneBy([
-            'streamKey' => $fragmentName
-        ]);
-
-        return null !== $stream;
+        $streamKey = pathinfo($fragmentName)['filename'];
+        return null !== $this->getStreamByKey($streamKey);
     }
 
     public function userHasAccess(User $user): bool
     {
         return $user !== null;
+    }
+
+    public function getStreamByKey(string $streamKey)
+    {
+        return $this
+            ->entityManager
+            ->getStreamsRepository()
+            ->findOneBy([
+                'streamKey' => $streamKey
+            ]);
+    }
+
+    public function getStreamById(int $streamId)
+    {
+        return $this
+            ->entityManager
+            ->getStreamsRepository()
+            ->find($streamId);
     }
 }

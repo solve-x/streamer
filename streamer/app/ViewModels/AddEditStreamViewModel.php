@@ -35,4 +35,10 @@ class AddEditStreamViewModel extends ViewModel
      * @var int
      */
     public $type;
+
+    /**
+     * @VM\DataType(DataType::Bool)
+     * @var boolean
+     */
+    public $isLive;
 }

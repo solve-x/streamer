@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\StreamService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     /**
+     * @var StreamService
+     */
+    private $streamService;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(StreamService $streamService)
     {
         $this->middleware('auth');
+        $this->streamService = $streamService;
     }
 
     /**
@@ -23,6 +30,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $streams = $this->streamService->getAllStreams();
+
+        return view('home', ['model' => $streams]);
     }
 }

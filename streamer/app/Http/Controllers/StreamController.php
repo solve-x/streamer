@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Stream;
 use App\Services\StreamService;
 use App\ViewModels\AddEditStreamViewModel;
 use Auth;
@@ -27,29 +28,74 @@ class StreamController extends Controller
     public function index()
     {
         $streams = $this->streamService->getAllStreams();
-        $streamTypes = $this->streamService->getAllStreamTypes();
         return view('streams/index', [
-            'model' => $streams,
+            'model' => $streams
+        ]);
+    }
+
+    public function createEdit($id = null)
+    {
+        $stream = Stream::empty();
+        if (null !== $id) {
+            $stream = $this->streamService->getStreamById($id);
+        }
+
+        $streamTypes = $this->streamService->getAllStreamTypes();
+
+        return view('streams/createEdit', [
+            'model' => $stream,
             'streamTypes' => $streamTypes
         ]);
     }
 
-    public function addEdit(AddEditStreamViewModel $model)
+    public function postCreateEdit(AddEditStreamViewModel $model)
     {
         if (!$model->isValid()) {
-            return response(404);
+            return response(400);
         }
 
         $user = Auth::user();
 
-        $streamId = $this->streamService->createNewStream(
+        $this->streamService->createUpdateStream(
+            $model->id,
             $model->name,
             $model->streamKey,
             $model->type,
-            $user->getId()
+            $user->getId(),
+            $model->isLive
         );
 
-        return response($streamId);
+        return response()->redirectToRoute('streams');
+    }
+
+    public function deleteStream($id)
+    {
+        $removed = $this
+            ->streamService
+            ->deleteStream($id);
+
+        if ($removed) {
+            return response()->json([
+                'redirect' => route('streams')
+            ]);
+        }
+
+        return response('Could not remove stream!', 500);
+    }
+
+    public function isLive(string $streamKey)
+    {
+        $stream = $this
+            ->streamService
+            ->getStreamByKey($streamKey);
+
+        if (null === $stream) {
+            return response('Stream not found!', 404);
+        }
+
+        return response()->json(
+            $stream->isLive()
+        );
     }
 
     /**

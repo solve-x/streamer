@@ -54,4 +54,12 @@ class UserRole
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
 }

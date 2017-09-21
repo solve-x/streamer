@@ -8,6 +8,7 @@
                 <tr>
                     <th>Username</th>
                     <th>Email</th>
+                    <th></th>
                     <th>
                         <a href="#" class="btn btn-success btn-xs">
                             <span class="glyphicon glyphicon-plus"></span>
@@ -21,7 +22,12 @@
                         <td>{{ $user->getName() }}</td>
                         <td>{{ $user->getEmail() }}</td>
                         <td>
-                            <a href="#" class="btn btn-default btn-xs">
+                            <?php if ($user->isLockout()) { ?>
+                            <span title="Račun zaklenjen" class="glyphicon glyphicon-lock"></span>
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <a href="{{ route('createEditUser', ['id' => $user->getId()]) }}" class="btn btn-default btn-xs">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                         </td>

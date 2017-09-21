@@ -6,6 +6,7 @@ namespace App\Repositories;
 use App\Entities\Stream;
 use App\Entities\StreamType;
 use App\Entities\User;
+use App\Entities\UserRole;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
@@ -14,7 +15,7 @@ class DoctrineUnitOfWork implements UnitOfWorkInterface
     /**
      * @var EntityManager
      */
-    private $entityManager = null;
+    private $entityManager;
 
     /**
      * DoctrineUnitOfWork constructor.
@@ -62,10 +63,18 @@ class DoctrineUnitOfWork implements UnitOfWorkInterface
     }
 
     /**
-     * @return StreamsRepository|StreamsRepository
+     * @return StreamsRepository|EntityRepository
      */
     public function getStreamsRepository()
     {
         return $this->entityManager->getRepository(Stream::class);
+    }
+
+    /**
+     * @return UserRolesRepository|EntityRepository
+     */
+    public function getUserRolesRepository()
+    {
+        return $this->entityManager->getRepository(UserRole::class);
     }
 }

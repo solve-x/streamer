@@ -87,15 +87,58 @@ class User implements
      */
     protected $userStreamRoles;
 
+    /**
+     * @ORM\Column(name="lockout", type="boolean")
+     * @var bool
+     */
+    protected $lockout;
+
     public function __construct()
     {
         $this->streams = new ArrayCollection();
+        $this->userRoles = new ArrayCollection();
+        $this->userStreamRoles = new ArrayCollection();
+    }
+
+    public function isInRole(int $roleId): bool
+    {
+        if (null === $this->userRoles) {
+            return false;
+        }
+
+        foreach ($this->userRoles as $storedRole) {
+            if ($storedRole->getId() === $roleId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function addToRole(UserRole $role)
+    {
+        if ($this->userRoles->contains($role)) {
+            return false;
+        }
+
+        $this->userRoles->add($role);
+        return true;
+    }
+
+    public function clearRoles()
+    {
+        $this->userRoles->clear();
+    }
+
+    public static function empty()
+    {
+        return new User();
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -113,21 +156,10 @@ class User implements
         return $this->isInRole(UserRole::SuperAdmin);
     }
 
-    public function isInRole(int $roleId): bool
-    {
-        foreach ($this->userRoles as $storedRole) {
-            if ($storedRole->getId() === $roleId) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail()
     {
         return $this->email;
     }
@@ -135,8 +167,56 @@ class User implements
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLockout(): bool
+    {
+        return $this->lockout;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @param Carbon $createdAt
+     */
+    public function setCreatedAt(Carbon $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @param Carbon $updatedAt
+     */
+    public function setUpdatedAt(Carbon $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @param bool $lockout
+     */
+    public function setLockout(bool $lockout)
+    {
+        $this->lockout = $lockout;
     }
 }

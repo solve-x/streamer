@@ -28,4 +28,9 @@ interface UnitOfWorkInterface
      * @return StreamsRepository
      */
     public function getStreamsRepository();
+
+    /**
+     * @return UserRolesRepository
+     */
+    public function getUserRolesRepository();
 }

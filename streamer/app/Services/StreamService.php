@@ -159,7 +159,8 @@ class StreamService extends BaseService
 
     public function existsByFragmentName(string $fragmentName): bool
     {
-        $streamKey = pathinfo($fragmentName)['filename'];
+        $streamKey = $this->getKeyFromFragmentName($fragmentName);
+
         return null !== $this->getStreamByKey($streamKey);
     }
 
@@ -184,5 +185,18 @@ class StreamService extends BaseService
             ->entityManager
             ->getStreamsRepository()
             ->find($streamId);
+    }
+
+    public function getKeyFromFragmentName($fragmentName): string
+    {
+        $streamKey = pathinfo($fragmentName)['filename'];
+
+        $partSeparatorIndex = strpos($streamKey, '-');
+
+        if ($partSeparatorIndex) {
+            $streamKey = substr($streamKey, 0, $partSeparatorIndex);
+        }
+
+        return $streamKey;
     }
 }

@@ -1848,16 +1848,16 @@
         },
         {
             "name": "solve-x/view-model",
-            "version": "v0.1.6",
+            "version": "v0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/solve-x/view-model.git",
-                "reference": "57c5b84ca3be4af1ffe4077183bf13e96dd237b6"
+                "reference": "a8111a3a9e8467a89c7c421f293aa19ae73e80d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solve-x/view-model/zipball/57c5b84ca3be4af1ffe4077183bf13e96dd237b6",
-                "reference": "57c5b84ca3be4af1ffe4077183bf13e96dd237b6",
+                "url": "https://api.github.com/repos/solve-x/view-model/zipball/a8111a3a9e8467a89c7c421f293aa19ae73e80d2",
+                "reference": "a8111a3a9e8467a89c7c421f293aa19ae73e80d2",
                 "shasum": ""
             },
             "require": {
@@ -1889,7 +1889,7 @@
             "keywords": [
                 "validation"
             ],
-            "time": "2017-09-18T09:22:24+00:00"
+            "time": "2017-09-19T05:04:58+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
